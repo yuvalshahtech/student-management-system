@@ -100,8 +100,7 @@ GPA: 9.2
 
 ## 🧑‍💻 Developer
 
-Yuval Shah  
-📍 Mumbai, India  
+Yuval Shah
 GitHub & LinkedIn: [@yuvalshahtech](https://github.com/yuvalshahtech)
 
 ---
