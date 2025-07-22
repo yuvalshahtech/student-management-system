@@ -1,7 +1,7 @@
 # 🔷 Student Management System
 🎓 Track • Update • Manage
 
-This is a Python-based Student Management System that allows users to efficiently add, view, search, update, and delete student records — with auto GPA calculation based on marks.
+A console-based Python project to manage student records — using basic logic, loops, and functions. This is a Python-based Student Management System that allows users to efficiently add, view, search, update, and delete student records — with auto GPA calculation based on marks.
 
 > Poster Logic → Functional Flow  
 > All core features are reflected visually through a sci-fi HUD-inspired interface:  
