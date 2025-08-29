@@ -111,3 +111,16 @@ This system is built to help users manage student records through a terminal int
 It includes all essential operations with basic input validation and GPA logic.
 
 ---
+
+##📝 Version History
+
+v1.0
+Initial release with core CRUD features (Add, View, Search, Update, Delete)
+GPA auto-calculation from marks
+
+v1.1 (Current)
+Added custom exception classes for Age, Name, Marks, and Choice
+Implemented input validation for empty fields, negative age, invalid marks, and wrong menu choices
+Enhanced stability with error handling in all functions
+
+---
