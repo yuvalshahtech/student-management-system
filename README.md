@@ -112,7 +112,7 @@ It includes all essential operations with basic input validation and GPA logic.
 
 ---
 
-##📝 Version History
+## 📝 Version History
 
 v1.0
 Initial release with core CRUD features (Add, View, Search, Update, Delete)
