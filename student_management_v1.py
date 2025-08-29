@@ -1,91 +1,124 @@
+class InvalidAgeError(Exception):
+    '''This class is for Invalid age'''
+    pass
+class InvalidNameError(Exception):
+    '''This class is for Invalid name'''
+    pass
+class InvalidMarksError(Exception):
+    '''This class is for Invalid marks'''
+    pass
+class InvalidChoiceError(Exception):
+    '''This class is for Invalid choice'''
+    pass
+
+#This function is for deleting a record
 def delete_student(students):
-    deleted=False
-    delete_name=input("Enter name to delete: ").title()
-    delete_name=validate_non_empty(delete_name)
-    for index,item in enumerate(students):
-        if item["Name"]==delete_name:
-            confirm = input("Are you sure you want to delete? (yes/no): ").lower()
-            if confirm == "yes":
-                del students[index]
-                deleted=True
-                break
-    if deleted==False:
-        print("No such student exists.")
+    try:
+        deleted=False
+        delete_name=validate_non_empty(input("Enter name to delete: "))
+        for index,item in enumerate(students):
+            if item["Name"]==delete_name:
+                confirm = input("Are you sure you want to delete? (yes/no): ").lower()
+                if confirm == "yes":
+                    del students[index]
+                    deleted=True
+                    break
+        if deleted==False:
+            print("No such student exists.")
+    except InvalidNameError as e:
+        print(f"Error: {e}")
+        
+#This function is for updating a record
 def update_student(students):
-    updated=False
-    update_name=input("Enter name to update marks: ").title()
-    update_name=validate_non_empty(update_name)
-    for index,item in enumerate(students):
-        if item["Name"]==update_name:
-            x=int(input("Enter new marks for the student: "))
-            students[index]["Marks"]=validate_marks(x)
-            students[index]["GPA"]=calculate_gpa(x)
-            updated=True
-            break
-    if updated==False:
-        print("No such student exists.")
+    try:
+        updated=False
+        update_name=validate_non_empty(input("Enter name to update marks: "))
+        for index,item in enumerate(students):
+            if item["Name"]==update_name:
+                x=int(input("Enter new marks for the student: "))
+                students[index]["Marks"]=validate_marks(x)
+                students[index]["GPA"]=calculate_gpa(x)
+                updated=True
+                break
+        if updated==False:
+            print("No such student exists.")
+    except (InvalidNameError,InvalidMarksError) as e:
+        print(f"Error: {e}")
+        
+#This function is for searching a record
 def search_student(students):
-    found=False
-    search_name=input("Enter name to search: ").title()
-    search_name=validate_non_empty(search_name)
-    for index,item in enumerate(students):
-        if item["Name"]==search_name:
-            for key,value in item.items():
-                print(f"{key}: {value}")
-            print("---------------------")
-            found=True
-            break
-    if found==False:
-        print("No such student exists.")
+    try:
+        found=False
+        search_name=validate_non_empty(input("Enter name to search: "))
+        for index,item in enumerate(students):
+            if item["Name"]==search_name:
+                for key,value in item.items():
+                    print(f"{key}: {value}")
+                print("---------------------")
+                found=True
+                break
+        if found==False:
+            print("No such student exists.")
+    except InvalidNameError as e:
+        print(f"Error: {e}")
+        
+#This function is for viewing all the records
 def view_all(students):
     for index,item in enumerate(students):
         print(f"------Student {index+1}------")
         for key,value in item.items():
             print(f"{key}: {value}")
         print("---------------------")
+        
+#This function is for calculating gpa
 def calculate_gpa(marks):
     gpa=marks/10
     return gpa
+
+#This function is for validating marks
 def validate_marks(marks):
-    while True:
-        if marks<0 or marks>100:
-            marks=int(input("Please enter valid marks: "))
-        else:
-            return marks
+    if marks<0 or marks>100:
+        raise InvalidMarksError("Marks should be from 0-100")
+    return marks
+
+#This function is for validating age
 def validate_age(age):
-    while True:
-        if age<0:
-            age=int(input("Please enter valid age: "))
-        else:
-            return age
+    if age<0:
+        raise InvalidAgeError("Age cannot be negative")
+    return age
+
+#This function is for validating the text is not empty
 def validate_non_empty(input_name):
-    while input_name.strip() == "":
-        input_name = input("Name cannot be empty. Please enter again: ").title()
+    if input_name.strip() == "":
+        raise InvalidNameError("Name cannot be empty")
     return input_name.title()
+
+#This function is for adding a record
 def add_student(students):
-    name=input("Enter your name: ").title()
-    name=validate_non_empty(name)
-    age=int(input("Enter your age: "))
-    age=validate_age(age)
-    subject=input("Enter subject name: ").title().strip()
-    subject=validate_non_empty(subject)
-    marks=int(input(f"Enter your marks in {subject}: "))
-    marks=validate_marks(marks)
-    gpa=calculate_gpa(marks)
-    new_student={
-    "Name": name,
-    "Age": age,
-    "Subject": subject,
-    "Marks": marks,
-    "GPA": gpa
-    }
-    students.append(new_student)
+    try:
+        name=validate_non_empty(input("Enter your name: "))
+        age=validate_age(int(input("Enter your age: ")))
+        subject=validate_non_empty(input("Enter subject name: "))
+        marks=validate_marks(int(input(f"Enter your marks in {subject}: ")))
+        gpa=calculate_gpa(marks)
+        new_student={
+        "Name": name,
+        "Age": age,
+        "Subject": subject,
+        "Marks": marks,
+         "GPA": gpa
+        }
+        students.append(new_student)
+    except (InvalidAgeError,InvalidNameError,InvalidMarksError) as e:
+        print(f"Error: {e}")
+
+#This function is validating the choice
 def validate_choice(choice,max_choice):
-    while True:
-        if choice<1 or choice>max_choice:
-            choice=int(input("You accidentally entered an invalid choice. Please try again: "))
-        else:
-            return choice
+    if choice<1 or choice>max_choice:
+        raise InvalidChoiceError(f"Valid Choices are only 1-{max_choice}")
+    return choice
+
+#This function is for displaying the menu
 def display():
     print("1. Add New Student")
     print("2. View All Students")
@@ -93,29 +126,37 @@ def display():
     print("4. Update Student Marks")
     print("5. Delete Student")
     print("6. Exit")
+
+#Main function
 def main():
     students=[]
     max_choice=6
     while True:
-        display()
-        choice=int(input("Enter your choice: "))
-        choice=validate_choice(choice,max_choice)
-        if choice==1:
-            add_student(students)
-        elif choice==2:
-            if len(students)==0:
-                print("Database is Empty")
+        try:
+            display()
+            choice=int(input("Enter your choice: "))
+            choice=validate_choice(choice,max_choice)
+            if choice==1:
+                add_student(students)
+            elif choice==2:
+                if len(students)==0:
+                    print("Database is Empty")
+                else:
+                    view_all(students)
+            elif choice==3:
+                search_student(students)
+            elif choice==4:
+                update_student(students)
+            elif choice==5:
+                delete_student(students)
             else:
-                view_all(students)
-        elif choice==3:
-            search_student(students)
-        elif choice==4:
-            update_student(students)
-        elif choice==5:
-            delete_student(students)
-        else:
-            print("Thank You for using Student Manager System")
-            break
+                confirm = input("Are you sure you want to exit? (yes/no): ").lower()
+                if confirm == "yes":
+                    print("Thank You for using Student Manager System")
+                    break
+        except (ValueError,InvalidChoiceError) as e:
+            print(f"Error: {e}")
 
 if __name__=="__main__":
     main()
+
